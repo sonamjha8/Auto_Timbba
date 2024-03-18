@@ -2,20 +2,21 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 
-class Chrome_driver :
-  def __init__(self):
+class Chrome_driver:
+    driver = None
 
-    # Initialize Chrome webdriver using ChromeDriverManager
-    self.url = "https://admin.timbba.in/#/login"
+    #can call the get_instance method for 1st time initile the driver chrome browser
+    @classmethod
+    def get_instance(cls):
+        if cls.driver is None:
+            cls.driver = webdriver.Chrome(ChromeDriverManager().install())
+        return cls.driver
 
-    # Create Chrome webdriver with ChromeDriverManager
-    driver_service = ChromeService(ChromeDriverManager().install())
-    self.driver = webdriver.Chrome(service=driver_service)
-    #self.driver.get(self.url)
-
-#object = Chrome_driver()
-
-    #------ To run this file uncomment the Chrome_driver() function
+    #can call the quit_driver method when you want to close the browser window
+    @classmethod
+    def quit_driver(cls):
+        if cls.driver is not None:
+            cls.driver.quit()
+            cls.driver = None
